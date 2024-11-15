@@ -4,17 +4,14 @@ import com.zierydev.cadastroalunos.dtos.AlunoDto;
 import com.zierydev.cadastroalunos.entities.Aluno;
 import com.zierydev.cadastroalunos.exceptions.ResourceNotFoundException;
 import com.zierydev.cadastroalunos.respositories.AlunoRepository;
-import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
 
 @Service
 public class AlunoService {
@@ -22,13 +19,15 @@ public class AlunoService {
     @Autowired
     private AlunoRepository alunoRepository;
 
-    //criar excessão personalizada ao salvar aluno
 
     //Salvar novo aluno
     public Aluno saveAluno( AlunoDto alunoDto) {
-        var aluno0 = new Aluno(); //cria uma instancia de Aluno
+        if (alunoRepository.findByMatricula(alunoDto.matricula()).isPresent()) {
+            throw new DataIntegrityViolationException("A matrícula já está em uso!");
+        }
+        Aluno aluno0 = new Aluno(); //cria uma instancia de Aluno
         BeanUtils.copyProperties(alunoDto, aluno0); //converte os dados que estão como dto para aluno
-         return alunoRepository.save(aluno0); //realiza o save dos dados no banco
+        return alunoRepository.save(aluno0); //realiza o save dos dados no banco
     }
 
     // Buscar todos alunos

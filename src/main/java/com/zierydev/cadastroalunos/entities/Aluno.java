@@ -14,6 +14,7 @@ public class Aluno implements Serializable {
     private long  id;
     private String nome;
     private int idade;
+    @Column(unique = true, nullable = false) //garante que as matrículas serão unícas
     private String matricula;
     private String curso;
 
