@@ -13,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/alunos")
+@CrossOrigin(origins = "http://localhost:5173")
 public class AlunoController {
 
     @Autowired
@@ -43,8 +44,8 @@ public class AlunoController {
     //Deletar informação de um aluno pelo id
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteAluno(@PathVariable Long id) {
-        String msg = alunoService.deleteAlunoById(id);
-        return ResponseEntity.ok(msg);
+        alunoService.deleteAlunoById(id);
+        return ResponseEntity.noContent().build();
     }
 
     //Atualizar dados de um aluno

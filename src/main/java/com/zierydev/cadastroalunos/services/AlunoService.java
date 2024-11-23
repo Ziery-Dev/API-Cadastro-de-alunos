@@ -46,10 +46,9 @@ public class AlunoService {
 
 
     //Deletar dados de um aluno
-    public String deleteAlunoById(Long id) {
+    public void deleteAlunoById(Long id) {
         Aluno aluno = findAlunoById(id);
         alunoRepository.delete(aluno);
-        return "Aluno deletado com sucesso";
     }
 
     //Atualizar dados do aluno
